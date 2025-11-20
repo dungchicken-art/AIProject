@@ -12,7 +12,7 @@
    ```bash
    pip install flask flask-cors networkx osmnx
    ```
-   (Nếu không cài được OSMnx hoặc không có graphml, app sẽ tự fallback sang đồ thị lưới 4x4.)
+   (Nếu không cài được OSMnx hoặc không có graphml, app sẽ tự fallback sang đồ thị lưới dày hơn (14x14) nằm đúng tọa độ khu vực Khương Đình để bạn vẫn thấy nhiều node trên bản đồ.)
 
 2. Khởi động backend:
    ```bash

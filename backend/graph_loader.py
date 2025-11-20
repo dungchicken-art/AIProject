@@ -1,5 +1,6 @@
 import json
 from ast import literal_eval
+from math import cos, radians, sqrt
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -25,16 +26,48 @@ def _load_from_osmnx() -> nx.MultiDiGraph:
     return ox.graph_from_place("Khương Đình, Thanh Xuân, Hà Nội, Việt Nam", network_type="drive")
 
 
-def _build_sample_graph() -> nx.MultiDiGraph:
-    graph = ox.utils_graph.get_largest_component(nx.grid_graph((4, 4), create_using=nx.DiGraph())).copy() if ox else nx.grid_graph((4, 4), create_using=nx.DiGraph())
-    multi_graph = nx.MultiDiGraph()
-    for node, data in graph.nodes(data=True):
-        y, x = node if isinstance(node, tuple) else (0.0, 0.0)
-        multi_graph.add_node(node, x=float(x), y=float(y))
-    for u, v in graph.edges():
-        length = 1.0
-        multi_graph.add_edge(u, v, length=length)
-    return multi_graph
+def _build_sample_graph(rows: int = 14, cols: int = 14) -> nx.MultiDiGraph:
+    """Build a geospatial grid centered on Khương Đình so nodes appear on the map."""
+
+    # Bounding box roughly covering Khương Đình so markers render in the right place
+    lat_min, lat_max = 20.9965, 21.0045
+    lng_min, lng_max = 105.808, 105.823
+
+    lat_step = (lat_max - lat_min) / max(rows - 1, 1)
+    lng_step = (lng_max - lng_min) / max(cols - 1, 1)
+
+    def edge_length(lat1, lng1, lat2, lng2):
+        dlat = lat2 - lat1
+        dlng = lng2 - lng1
+        mean_lat = radians((lat1 + lat2) / 2)
+        return sqrt((dlat * 111_000) ** 2 + (dlng * 111_320 * cos(mean_lat)) ** 2)
+
+    graph = nx.MultiDiGraph()
+
+    for r in range(rows):
+        for c in range(cols):
+            lat = lat_min + r * lat_step
+            lng = lng_min + c * lng_step
+            graph.add_node((r, c), x=lng, y=lat)
+
+    for r in range(rows):
+        for c in range(cols):
+            if c + 1 < cols:
+                u, v = (r, c), (r, c + 1)
+                lat1, lng1 = graph.nodes[u]["y"], graph.nodes[u]["x"]
+                lat2, lng2 = graph.nodes[v]["y"], graph.nodes[v]["x"]
+                length = edge_length(lat1, lng1, lat2, lng2)
+                graph.add_edge(u, v, length=length)
+                graph.add_edge(v, u, length=length)
+            if r + 1 < rows:
+                u, v = (r, c), (r + 1, c)
+                lat1, lng1 = graph.nodes[u]["y"], graph.nodes[u]["x"]
+                lat2, lng2 = graph.nodes[v]["y"], graph.nodes[v]["x"]
+                length = edge_length(lat1, lng1, lat2, lng2)
+                graph.add_edge(u, v, length=length)
+                graph.add_edge(v, u, length=length)
+
+    return graph
 
 
 def load_graph() -> nx.MultiDiGraph:
@@ -52,6 +85,8 @@ def load_graph() -> nx.MultiDiGraph:
         data["base_cost"] = length
         data["cost"] = length
     return graph
+
+
 def _encode_node(node):
     return int(node) if isinstance(node, int) else str(node)
 
