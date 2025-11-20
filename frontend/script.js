@@ -233,7 +233,7 @@ function animateSteps(steps, finalPath) {
     if (idx >= steps.length) {
       clearInterval(state.animation);
       drawFinalPath(finalPath);
-      setStatus("Hoàn thành.");
+      setStatus("Hoàn thành. Đã hiển thị đường đi của thuật toán.");
       return;
     }
     const step = steps[idx];
@@ -242,6 +242,7 @@ function animateSteps(steps, finalPath) {
     highlightNodes(step.explored, "#888");
     highlightNodes(step.frontier, "#2274a5");
     highlightNodes([step.current], "#ffd166");
+    drawFinalPath(finalPath);
     idx += 1;
   }, 700);
 }
