@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pathfinding Khương Đình</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Bản đồ tìm đường - Khương Đình</h1>
+    <p>Chọn Start, Goal, đánh dấu đường tắc/ngập và chạy thuật toán.</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <div class="control-group">
+        <label>Thuật toán:</label>
+        <button data-algo="dfs">Run DFS</button>
+        <button data-algo="bfs">Run BFS</button>
+        <button data-algo="ucs">Run UCS</button>
+        <button data-algo="astar">Run A*</button>
+        <button data-algo="greedy">Run Greedy</button>
+      </div>
+      <div class="control-group">
+        <label>Đánh dấu cạnh:</label>
+        <select id="edgeType">
+          <option value="jam">Tắc (x5)</option>
+          <option value="flood">Ngập (x10)</option>
+        </select>
+        <button id="reset">Reset trọng số</button>
+      </div>
+      <div class="status" id="status">Chưa chọn Start/Goal.</div>
+    </section>
+
+    <section id="map"></section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
