@@ -107,6 +107,7 @@ function selectNode(nodeId) {
   if (!state.goal) {
     state.goal = nodeId;
     resetNodeStyles();
+    previewPath();
     setStatus("Đã chọn Start/Goal. Click 2 node liên tiếp để đánh dấu đường.");
     return;
   }
@@ -138,6 +139,7 @@ function markEdge(u, v, type) {
         polyline.setStyle({ color: type === "flood" ? "black" : "orange", weight: 5 });
       }
       setStatus(`Đánh dấu cạnh ${u} → ${v} (${type}), cost=${data.new_cost}`);
+      previewPath();
     })
     .catch((err) => setStatus(`Không đánh dấu được cạnh: ${err}`));
 }
@@ -255,11 +257,30 @@ function resetColors() {
 function drawFinalPath(path) {
   for (let i = 0; i < path.length - 1; i++) {
     const key = `${path[i]}-${path[i + 1]}`;
-    const poly = state.polylines.get(key);
+    const poly = state.polylines.get(key) || state.polylines.get(`${path[i + 1]}-${path[i]}`);
     if (poly) {
       poly.setStyle({ color: "#d90429", weight: 6 });
     }
   }
+}
+
+function previewPath() {
+  if (!state.start || !state.goal) return;
+  if (state.animation) {
+    clearInterval(state.animation);
+  }
+  setStatus("Tìm đường nhanh giữa Start và Goal...");
+  fetch(`/run/ucs?start=${state.start}&goal=${state.goal}`)
+    .then((res) => res.json())
+    .then((data) => {
+      resetColors();
+      resetNodeStyles();
+      drawFinalPath(data.final_path);
+      highlightNodes([state.start], "#22c55e");
+      highlightNodes([state.goal], "#f87171");
+      setStatus("Đã hiển thị đường đi giữa Start và Goal. Chọn thuật toán để xem từng bước.");
+    })
+    .catch((err) => setStatus(`Không tìm được đường đi: ${err}`));
 }
 
 fetchGraph();
