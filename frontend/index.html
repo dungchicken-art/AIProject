@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khương Đình Pathfinding</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-sA+e2atCyoKI3S2kEqiB+0QXqH86nL3RmbF2C6p/tZU="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🌐 Tìm đường khu Khương Đình</h1>
+      <p>Chọn Start → Goal → chọn cạnh tắc/ngập → chạy thuật toán.</p>
+    </header>
+    <main>
+      <section class="controls">
+        <div class="panel">
+          <h2>Thuật toán</h2>
+          <div class="buttons">
+            <button data-algo="dfs">Run DFS</button>
+            <button data-algo="bfs">Run BFS</button>
+            <button data-algo="ucs">Run UCS</button>
+            <button data-algo="astar">Run A*</button>
+            <button data-algo="greedy">Run Greedy</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Đánh dấu đường</h2>
+          <label><input type="radio" name="edgeType" value="jam" checked /> Tắc (x5)</label>
+          <label><input type="radio" name="edgeType" value="flood" /> Ngập (x10)</label>
+          <div class="legend">
+            <span class="badge start">Start</span>
+            <span class="badge goal">Goal</span>
+            <span class="badge jam">Tắc</span>
+            <span class="badge flood">Ngập</span>
+            <span class="badge explored">Explored</span>
+            <span class="badge frontier">Frontier</span>
+            <span class="badge current">Current</span>
+            <span class="badge final">Final Path</span>
+          </div>
+          <button id="reset">Reset trọng số</button>
+        </div>
+        <div class="panel" id="status"></div>
+      </section>
+      <section class="map-container">
+        <div id="map"></div>
+      </section>
+    </main>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-VuZ8C7bCw8k5t1GCSjZL+Q2MX7PQpN8p+Sm+kB/xOoM="
+      crossorigin=""
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>

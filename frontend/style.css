@@ -1,0 +1,152 @@
+:root {
+  --bg: #0b0d10;
+  --panel: #141821;
+  --text: #e9efff;
+  --accent: #ff7a18;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+header {
+  padding: 1rem 2rem;
+  background: linear-gradient(90deg, #1d2433, #151b26);
+  border-bottom: 1px solid #232b3b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+main {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid #1f2633;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+
+button {
+  background: #1f2937;
+  color: var(--text);
+  border: 1px solid #2c3647;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: #2e3a52;
+  border-color: var(--accent);
+  color: #fff;
+}
+
+label {
+  display: block;
+  margin: 0.4rem 0;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  border: 1px solid #2b3343;
+}
+
+.badge.start {
+  background: #1c7c54;
+}
+
+.badge.goal {
+  background: #ba1b1d;
+}
+
+.badge.jam {
+  background: #ffb703;
+  color: #0b0d10;
+}
+
+.badge.flood {
+  background: #111;
+  color: #fff;
+}
+
+.badge.explored {
+  background: #7f8c8d;
+}
+
+.badge.frontier {
+  background: #1d70a2;
+}
+
+.badge.current {
+  background: #ffd166;
+  color: #0b0d10;
+}
+
+.badge.final {
+  background: #d90429;
+}
+
+.map-container {
+  background: #0f121a;
+  border: 1px solid #1f2633;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+#map {
+  width: 100%;
+  height: calc(100vh - 120px);
+}
+
+#status {
+  min-height: 60px;
+  line-height: 1.4;
+  color: #cdd6f4;
+  background: #111623;
+}
+
+@media (max-width: 960px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+  #map {
+    height: 500px;
+  }
+}
