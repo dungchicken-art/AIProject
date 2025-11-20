@@ -17,11 +17,19 @@ DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "khuong_dinh.graph
 def _load_from_graphml(path: Path) -> nx.MultiDiGraph:
     if not path.exists():
         raise FileNotFoundError("GraphML file not found")
-    return ox.load_graphml(path)
+
+    if ox is not None and hasattr(ox, "load_graphml"):
+        return ox.load_graphml(path)
+
+    # Fallback to pure networkx loading so we do not require OSMnx utilities
+    graph = nx.read_graphml(path)
+    if not isinstance(graph, nx.MultiDiGraph):
+        graph = nx.MultiDiGraph(graph)
+    return graph
 
 
 def _load_from_osmnx() -> nx.MultiDiGraph:
-    if ox is None:
+    if ox is None or not hasattr(ox, "graph_from_place"):
         raise ImportError("osmnx is not installed; cannot download graph")
     return ox.graph_from_place("Khương Đình, Thanh Xuân, Hà Nội, Việt Nam", network_type="drive")
 
@@ -72,7 +80,7 @@ def _build_sample_graph(rows: int = 14, cols: int = 14) -> nx.MultiDiGraph:
 
 def load_graph() -> nx.MultiDiGraph:
     try:
-        if DATA_PATH.exists() and ox is not None:
+        if DATA_PATH.exists():
             graph = _load_from_graphml(DATA_PATH)
         else:
             graph = _load_from_osmnx()
