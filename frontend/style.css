@@ -52,6 +52,13 @@ main {
   gap: 0.5rem;
 }
 
+.toggle-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
 button {
   background: #1f2937;
   color: var(--text);
